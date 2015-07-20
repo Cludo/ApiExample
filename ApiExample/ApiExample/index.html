@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Search example</title>
+    <!-- Netmester search start JS -->
+    <!--[if lte IE 9]>
+        <script src="https://api.cludo.com/scripts/xdomain.js" slave="https://api.cludo.com/proxy.html"></script>
+    <![endif]-->
+    <!--[if lte IE 8]>
+        <script type="text/javascript" src="https://api.cludo.com/bundles/browsers.event"></script>
+    <![endif]-->
+    <!-- Netmester search end JS -->
+</head>
+<body>
+    <!-- NM Search top bar start -->
+    <div id="search-form">
+        <label for="search_top">Search</label>
+        <input name="searchrequest" type="text" id="search_top" value="Search..." title="search" autocomplete="off" />
+        <button type="button">Search</button>
+    </div>
+    <!-- NM Search top bar end -->
+    <!-- ------------ -->
+    <!-- SEARCH START -->
+    <!-- ------------ -->
+    <div id="search-results">
+
+        <!-- Search results count start -->
+        <div class="search-result-count"></div>
+        <!-- Search results count end -->
+        <!-- Search results start -->
+        <div class="search-results"></div>
+        <!-- Search results end -->
+        <!-- Search 'Did you mean' start -->
+        <div class="search-did-you-mean"></div>
+        <!-- Search 'Did you mean' -->
+        <!-- Search facets start -->
+        <div class="search-filters"></div>
+        <!-- Search facets end -->
+
+    </div>
+    <!-- ---------- -->
+    <!-- SEARCH END -->
+    <!-- ---------- -->
+
+
+<!-- NM Search body init script start -->
+<script type="text/javascript" src="https://api.cludo.com/bundles/search-script"></script>
+<script>
+    (function() {
+        var cludoSettings = {
+            searchApiUrl: "/api/Cludo", //This should be pointed to internal website url
+            customerId: ___CUSTOMER_ID__, // Customer id in api
+            siteId: ___SITE_ID__, // Site Id in api
+            initSearchBoxText: "Search...",
+            customerTemplate: "__TEMPLATE__NAME___",
+            searchUrl: "/SearchPage.html", // Search result page url
+            searchInputs: ["search-form"], // IDs of all search boxes within the site
+            searchResultsWrapper: "search-results", // ID of element that holds search results
+            loading: "Searching ..." // Loading text (can be also an image, e.g. <img src="/img/loading.gif" />)
+        };
+        var nmCludo = new Cludo(cludoSettings);
+        nmCludo.init();
+    })();
+</script>
+<!-- NM Search body init script start -->
+</body>
+</html>
