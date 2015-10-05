@@ -145,6 +145,10 @@ namespace ApiExample.Controllers
         ///     Filter ONLY results on fields and does not affect facets statititcs
         /// </summary>
         public Dictionary<string, string[]> Facets { get; set; }
+        /// <summary>
+        /// Filter results and facets on that particular field values
+        /// </summary>
+        public Dictionary<string, string[]> Filters { get; set; }
 
         public int? PerPage { get; set; }
         public string DefaultOperator { get; set; }
