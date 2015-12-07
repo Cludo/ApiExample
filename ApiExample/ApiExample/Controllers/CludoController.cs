@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Web.Http;
 using Newtonsoft.Json;
 
@@ -17,7 +18,11 @@ namespace ApiExample.Controllers
     public class CludoController : ApiController
     {
         //
-        private const string CustomerKey = "__CUSTOMER_KEY__"; // Bonus points: Add it to your config file
+        private string CustomerKey
+        {
+            get { return WebConfigurationManager.AppSettings["Cludo.CustomerKey"]; }
+        }
+
         private const string CludoSearchApiUrl = "https://api.cludo.com/api/v3/"; // Add this url to your config file as well
 
         /// <summary>
@@ -31,7 +36,7 @@ namespace ApiExample.Controllers
         public Task<HttpResponseMessage> PublicSettings(int customerId, int websiteId)
         {
             var requestUrl = string.Format("{0}/{1}/websites/publicsettings", customerId, websiteId);
-            return MakeGetRequest(customerId, websiteId, requestUrl);
+            return MakeGetRequest(customerId, requestUrl);
         }
 
         /// <summary>
@@ -46,7 +51,7 @@ namespace ApiExample.Controllers
         public Task<HttpResponseMessage> Autocomplete(int customerId, int websiteId, string text)
         {
             var requestUrl = string.Format("{0}/{1}/Autocomplete?text={2}", customerId, websiteId, text);
-            return MakeGetRequest(customerId, websiteId, requestUrl);
+            return MakeGetRequest(customerId, requestUrl);
         }
 
         /// <summary>
@@ -54,18 +59,18 @@ namespace ApiExample.Controllers
         /// </summary>
         /// <param name="customerId"></param>
         /// <param name="websiteId"></param>
-        /// <param name="request"></param>
         /// <returns></returns>
         [Route("~/api/Cludo/{customerId:int}/{websiteId:int}/Search")]
         [HttpPost]
-        public async Task<HttpResponseMessage> Search(int customerId, int websiteId, [FromBody] SearchRequest request)
+        public async Task<HttpResponseMessage> Search(int customerId, int websiteId)
         {
-            using (var client = GetClient(websiteId))
+            var requestString = await Request.Content.ReadAsStringAsync();
+            using (var client = GetClient(customerId))
             {
                 var requestUrl = string.Format("{0}/{1}/search", customerId, websiteId);
                 var result = await
                     client.PostAsync(requestUrl,
-                        new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json"));
+                        new StringContent(requestString, Encoding.UTF8, "application/json"));
                 return await ProcessResponse(result);
             }
         }
@@ -74,10 +79,9 @@ namespace ApiExample.Controllers
         ///     Simple get request to api
         /// </summary>
         /// <param name="customerId"></param>
-        /// <param name="websiteId"></param>
         /// <param name="url"></param>
         /// <returns></returns>
-        private async Task<HttpResponseMessage> MakeGetRequest(int customerId, int websiteId, string url)
+        private async Task<HttpResponseMessage> MakeGetRequest(int customerId, string url)
         {
             using (var client = GetClient(customerId))
             {
@@ -96,7 +100,10 @@ namespace ApiExample.Controllers
         private async Task<HttpResponseMessage> ProcessResponse(HttpResponseMessage result)
         {
             if (!result.IsSuccessStatusCode)
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid request");
+            {
+                var errorMessage = await result.Content.ReadAsStringAsync();
+                return Request.CreateErrorResponse(result.StatusCode, errorMessage);
+            }
 
             var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(await result.Content.ReadAsStringAsync(), Encoding.UTF8,
@@ -120,38 +127,5 @@ namespace ApiExample.Controllers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return client;
         }
-    }
-
-    /// <summary>
-    ///     Class which represents search request.
-    /// </summary>
-    public class SearchRequest
-    {
-        public SearchRequest()
-        {
-            Page = 1;
-            Facets = new Dictionary<string, string[]>();
-        }
-
-        public string ResponseType
-        {
-            get { return "JsonHtml"; }
-        }
-
-        public string Query { get; set; }
-        public string Template { get; set; }
-
-        /// <summary>
-        ///     Filter ONLY results on fields and does not affect facets statititcs
-        /// </summary>
-        public Dictionary<string, string[]> Facets { get; set; }
-        /// <summary>
-        /// Filter results and facets on that particular field values
-        /// </summary>
-        public Dictionary<string, string[]> Filters { get; set; }
-
-        public int? PerPage { get; set; }
-        public string DefaultOperator { get; set; }
-        public int Page { get; set; }
     }
 }

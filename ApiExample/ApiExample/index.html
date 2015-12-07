@@ -44,7 +44,7 @@
 
 
 <!-- NM Search body init script start -->
-<script type="text/javascript" src="https://api.cludo.com/bundles/search-script"></script>
+    <script type="text/javascript" src="https://customer.cludo.com/scripts/bundles/search-script.min.js"></script>
 <script>
     (function() {
         var cludoSettings = {
@@ -52,8 +52,9 @@
             customerId: ___CUSTOMER_ID__, // Customer id in api
             siteId: ___SITE_ID__, // Site Id in api
             initSearchBoxText: "Search...",
-            customerTemplate: "__TEMPLATE__NAME___",
-            searchUrl: "/SearchPage.html", // Search result page url
+            intranetSearch: true,
+            customerTemplate: "TEMPLATE_NAME",
+            searchUrl: "/YOUR_SEARCH_PAGE.html", // Search result page url
             searchInputs: ["search-form"], // IDs of all search boxes within the site
             searchResultsWrapper: "search-results", // ID of element that holds search results
             loading: "Searching ..." // Loading text (can be also an image, e.g. <img src="/img/loading.gif" />)
