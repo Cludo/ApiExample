@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Routing;
 
 namespace ApiExample
 {
@@ -11,6 +13,12 @@ namespace ApiExample
             // Web API routes
             //config.MapHttpAttributeRoutes();
             var routes = config.Routes;
+            //This we need in case of CORS
+            config.Routes.MapHttpRoute("Web API Options",
+                "api/Cludo/{*catchAll}", new { action = "Options", controller = "Cludo" },
+                new { httpMethod = new HttpMethodConstraint(HttpMethod.Options) }
+                );
+
             routes.MapHttpRoute(
                 "publicsettings",
                 "api/Cludo/{customerId}/{websiteId}/websites/publicsettings",
@@ -23,9 +31,7 @@ namespace ApiExample
                 new {controller = "Cludo", action = "Autocomplete", text = RouteParameter.Optional}
                 );
 
-
-            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new {id = RouteParameter.Optional}
-                );
+            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new {id = RouteParameter.Optional});
         }
     }
 }

@@ -75,6 +75,13 @@ namespace ApiExample.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpOptions]
+        public HttpResponseMessage Options()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
         /// <summary>
         ///     Simple get request to api
         /// </summary>
