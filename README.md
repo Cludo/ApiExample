@@ -32,6 +32,6 @@ The Cludo controller is using **CustomerKey** which is read from config file. Th
 
 #Switch Search Url
 In our [search example](ApiExample/ApiExample/index.html), the configuration script is switched to an internal url. This can be done by changing the property **searchApiUrl** to **"/api/Cludo"** so all search requests will go though your own controller.
-
+Then set **intranetSearch** to true
 
 Have any questions, don't hesitate to [Contact us](https://www.cludo.com/contact)
