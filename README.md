@@ -11,13 +11,13 @@ If you can't use MapHttpAttributeRoutes then you can use routing table. [See Exa
 ```
 routes.MapHttpRoute(
                 "publicsettings",
-                "api/Cludo/{customerId}/{websiteId}/websites/publicsettings",
+                "api/Cludo/{customerId}/{engineId}/websites/publicsettings",
                 new {controller = "Cludo", action = "publicsettings"}
                 );
 
 routes.MapHttpRoute(
                 "Autocomplete",
-                "api/Cludo/{customerId}/{websiteId}/{action}/{text}",
+                "api/Cludo/{customerId}/{engineId}/{action}/{text}",
                 new {controller = "Cludo", action = "Autocomplete", text = RouteParameter.Optional}
                 );
 ```
