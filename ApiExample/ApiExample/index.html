@@ -46,11 +46,12 @@
 <!-- NM Search body init script start -->
     <script type="text/javascript" src="https://customer.cludo.com/scripts/bundles/search-script.min.js"></script>
 <script>
+var CludoSearch;
     (function() {
         var cludoSettings = {
             searchApiUrl: "/api/Cludo", //This should be pointed to internal website url
             customerId: ___CUSTOMER_ID__, // Customer id in api
-            siteId: ___SITE_ID__, // Site Id in api
+            engineId: ___SITE_ID__, // Site Id in api
             initSearchBoxText: "Search...",
             intranetSearch: true,
             customerTemplate: "TEMPLATE_NAME",
@@ -59,8 +60,8 @@
             searchResultsWrapper: "search-results", // ID of element that holds search results
             loading: "Searching ..." // Loading text (can be also an image, e.g. <img src="/img/loading.gif" />)
         };
-        var nmCludo = new Cludo(cludoSettings);
-        nmCludo.init();
+        CludoSearch= new Cludo(cludoSettings);
+        CludoSearch.init();
     })();
 </script>
 <!-- NM Search body init script start -->
