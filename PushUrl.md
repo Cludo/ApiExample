@@ -37,8 +37,8 @@ In the above axample a `securityToken` is needed.
 This token is calculated in the following way:
 
 ```
- securityToken = Base64({customerId}:{customerKey}); 
- //ex. Base64("1337:982389hNbB8729") - where customerId=1337 and customerKey=982389hNbB8729
+ securityToken = Base64("{customerId}:{customerKey}") 
+ //ex. Base64("1337:982389hNbB8729") = MTMzNzo5ODIzODloTmJCODcyOQ==
 ```
 
 You will be given a _customerKey_ when we setup your solution, otherwise contact support.
