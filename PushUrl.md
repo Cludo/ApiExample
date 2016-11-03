@@ -16,12 +16,15 @@ Requirements:
 
 # Example request
 
-A Complete request would look like the following:
+An actual request would look like the following:
 ```
-POST https://api.cludo.com/api/v3/1337/content/42/pushurls
-Content-Type:application/json
-Authorization:Basic {securityToken}
+POST /api/v3/1337/content/42/pushurls HTTP/1.1
+Host: api.cludo.com
+Content-Type: application/json
+Cache-Control: no-cache
+Authorization: Basic {securityToken}
 ```
+
 Body:
 ```
 [
