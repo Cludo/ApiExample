@@ -3,3 +3,4 @@ ApiExample/packages/**
 **/bin/**
 ApiExample/ApiExample.v12.suo
 ApiExample/ApiExample/ApiExample.csproj.user
+.vs/

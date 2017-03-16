@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ApiExample.Controllers
 {
@@ -64,16 +66,47 @@ namespace ApiExample.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Search(int customerId, int websiteId)
         {
-            var requestString = await Request.Content.ReadAsStringAsync();
+            //In "ReadAndModifyRequestBody" you can append filters for ex. personalization
+            var requestBody = await ReadAndModifyRequest();
+
             using (var client = GetClient(customerId))
             {
                 var requestUrl = string.Format("{0}/{1}/search", customerId, websiteId);
                 var result = await
                     client.PostAsync(requestUrl,
-                        new StringContent(requestString, Encoding.UTF8, "application/json"));
+                        new StringContent(requestBody, Encoding.UTF8, "application/json"));
                 return await ProcessResponse(result);
             }
         }
+
+        private async Task<string> ReadAndModifyRequest()
+        {
+            var requestObject =  JObject.Parse(await Request.Content.ReadAsStringAsync());
+
+            //::::PERSONALISATION
+            SetPersonalisationFilters(requestObject);
+
+            return JsonConvert.SerializeObject(requestObject);
+        }
+
+        private static void SetPersonalisationFilters(JObject requestObject)
+        {
+            //Get existing filters
+            var filtersDict = GetDictionaryFromJObject(requestObject, "filters");
+
+            //Add new filter
+            //filtersDict.Add("UserRoles", new[] { "1337", "42" });
+            
+            //Update the body with the new filters
+            requestObject["filters"] = JToken.FromObject(filtersDict);
+        }
+
+        private static Dictionary<string, string[]> GetDictionaryFromJObject(JObject requestObject, string property)
+        {
+            return JsonConvert.DeserializeObject<Dictionary<string, string[]>>((requestObject[property] ?? "").ToString())
+                   ?? new Dictionary<string, string[]>();
+        }
+
 
         [AllowAnonymous]
         [HttpOptions]
