@@ -66,7 +66,7 @@ namespace ApiExample.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Search(int customerId, int websiteId)
         {
-            //In "ReadAndModifyRequestBody" you can append filters for ex. personalization
+            //In "ReadAndModifyRequest" you can append filters for ex. personalization
             var requestBody = await ReadAndModifyRequest();
 
             using (var client = GetClient(customerId))
